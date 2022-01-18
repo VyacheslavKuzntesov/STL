@@ -10,7 +10,7 @@ using std::endl;
 #define tab "\t"
 
 //#define STL_ARRAY
-#define STL_VECTOR
+//#define STL_VECTOR
 
 void main()
 {
@@ -62,7 +62,25 @@ void main()
 	cout << "MaxSize: " << d_vec.max_size() << endl;*/
 #endif // STL_VECTOR
 
+	std::vector<int> vec = { 0,1,1,2,3,5,8,13,21,34 };
+	int value;
+	int index;
+	cout << "Введите индекс добовляемого значения: "; cin >> index;
+	cout << "Введите добовляемое значение: "; cin >> value;
+	vec.insert(vec.cbegin() + index, value);
 
+	for (int i = 0; i < vec.capacity(); i++)
+	{
+		cout << vec.data()[i] << tab;
+	}
+
+	cout << endl <<"Введите индекс удаляемого значения: "; cin >> index;
+	vec.erase(vec.cbegin() + index);
+
+	for (int i = 0; i < vec.capacity(); i++)
+	{
+		cout << vec.data()[i] << tab;
+	}
 }
 
 
