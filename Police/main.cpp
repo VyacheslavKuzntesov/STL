@@ -92,10 +92,14 @@ void load(std::map<std::string, std::list<Crime>>& base)
 		while (!fin.eof())
 		{
 			std::getline(fin, licence_plate, ':');
-			std::getline(fin, all_crimes);
-			if (licence_plate.empty())break;
+			Crime crime;
+			fin >> crime;
+			/*std::getline(fin, all_crimes);
+			if (licence_plate.empty())break;*/
 
-			/*all_crimes.erase(0, all_crimes.find_first_not_of(' '));
+			/*
+			//вариант c++
+			all_crimes.erase(0, all_crimes.find_first_not_of(' '));
 			all_crimes.erase(all_crimes.find(';'), all_crimes.size());
 			if (all_crimes.find(',') == std::string::npos)
 			{
@@ -114,6 +118,8 @@ void load(std::map<std::string, std::list<Crime>>& base)
 				base[licence_plate].push_back(Crime(crime_id, place));
 			}*/
 
+			/*
+			//вариант strtok
 			char* sz_all_crimes = new char[all_crimes.size()]{};
 			strcpy(sz_all_crimes, all_crimes.c_str());
 			char delimeters[] = ",;";
@@ -121,7 +127,8 @@ void load(std::map<std::string, std::list<Crime>>& base)
 			{
 				while (*pch == ' ')pch++;
 				base[licence_plate].push_back(Crime(atoi(pch), pch + 1));
-			}
+			}*/
+
 		}
 		fin.close();
 	}
