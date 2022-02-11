@@ -6,6 +6,7 @@
 #include<string>
 #include<map>
 #include<list>
+#include<conio.h>
 
 #include"Crime.h"
 
@@ -14,10 +15,13 @@ using std::cout;
 using std::endl;
 
 #define tab "\t"
+#define delimeter "\n-------------------------------------------------------\n"
 
+void menu();
 void print(const std::map<std::string, std::list<Crime>>& base);
 void save(const std::map<std::string, std::list<Crime>>& base);
 void load(std::map<std::string, std::list<Crime>>& base);
+void add_crime(std::map<std::string, std::list<Crime>>& base);
 
 int select_crime();
 
@@ -33,20 +37,35 @@ void main()
 		std::pair<std::string,std::list<Crime>>("a123ab",{Crime(5,"ТЦ Экватор")}),
 		std::pair<std::string,std::list<Crime>>("b555aa",{Crime(7,"ул. Парижской Коммуны")}),
 	}*/;
+	char key;
+	do
+	{
+		system("CLS");
+		menu();
+		key = _getch();
+		switch (key)
+		{
+		case'0':load(base); break;
+		case '1':print(base); break;
+		case '2':add_crime(base); break;
+		case '8':save(base); break;
+		default:
+			break;
+		}
+	} while (key != 27);
 
-	load(base);
-	print(base);
-	//save(base);
+}
 
-	/*std::string lincence_plate;
-	cout << "Введите номер: "; std::getline(cin, lincence_plate);
-	Crime crime; getline(cin,crime);
-	base[lincence_plate].push_back(crime);
-
-	print(base);*/
-
-	//print(base);
-	//save(base);
+void menu()
+{
+	system("CLS");
+	cout << "0 - Загрузка базы из файла;" << endl;
+	cout << "1 - Вывод всей базы;" << endl;
+	cout << delimeter;
+	cout << "2 - Добавить правонарушения;" << endl;
+	cout << "8 - Сохрвнение базы в файл;" << endl;
+	cout << delimeter;
+	cout << "Escape - Выход" << endl;
 }
 
 void print(const std::map<std::string, std::list<Crime>>& base)
@@ -61,6 +80,7 @@ void print(const std::map<std::string, std::list<Crime>>& base)
 		}
 		cout << "\n---------------------------------------------------------------------\n";
 	}
+	system("PAUSE");
 }
 
 void save(const std::map<std::string, std::list<Crime>>& base)
@@ -79,7 +99,7 @@ void save(const std::map<std::string, std::list<Crime>>& base)
 		fout << ";\n";
 	}
 	fout.close();
-	system("start notepad base.txt");
+	system("notepad base.txt");
 }
 
 void load(std::map<std::string, std::list<Crime>>& base)
@@ -95,7 +115,9 @@ void load(std::map<std::string, std::list<Crime>>& base)
 			std::getline(fin, all_crimes);
 			if (licence_plate.empty())break;
 
-			/*all_crimes.erase(0, all_crimes.find_first_not_of(' '));
+			/*
+			//C++
+			all_crimes.erase(0, all_crimes.find_first_not_of(' '));
 			all_crimes.erase(all_crimes.find(';'), all_crimes.size());
 			if (all_crimes.find(',') == std::string::npos)
 			{
@@ -114,6 +136,7 @@ void load(std::map<std::string, std::list<Crime>>& base)
 				base[licence_plate].push_back(Crime(crime_id, place));
 			}*/
 
+			//strtok
 			char* sz_all_crimes = new char[all_crimes.size()]{};
 			strcpy(sz_all_crimes, all_crimes.c_str());
 			char delimeters[] = ",;";
@@ -125,6 +148,12 @@ void load(std::map<std::string, std::list<Crime>>& base)
 		}
 		fin.close();
 	}
+	else
+	{
+		std::cerr << "File not found" << endl;
+	}
+	cout << "База загружена из файла.";
+	system("PAUSE");
 }
 
 int select_crime()
@@ -134,6 +163,24 @@ int select_crime()
 		cout << i.first << tab << i.second << endl;
 	}
 	int id;
-	cin >> id;
+	do
+	{
+		cout << "Выберите правонарушение: ";
+		//cin >> id;
+		id = _getch() - 48;
+		cout << id << endl;
+	} while (id >= crime.size() && id != 27);
 	return id;
+}
+
+void add_crime(std::map<std::string, std::list<Crime>>& base)
+{
+	std::string licence_plate;
+	cout << "Введите номер автомобиля: "; std::getline(cin, licence_plate);
+	int crime_id = select_crime();
+	std::string place;
+	cout << "Введите место проишествия: "; std::getline(cin, place);
+	base[licence_plate].push_back(Crime(crime_id, place));
+	cout << "Запись добавлена.";
+	system("PAUSE");
 }
